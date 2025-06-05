@@ -1,29 +1,26 @@
 resource "aws_iam_role" "adcash-project" {
     name = "eks-cluster-adcash-project-role"
-  
-    assume_role_policy = <<POLICY
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "eks.amazonaws.com"
-        },
-        "Action": "sts:AssumeRole"
-      }
-    ]
-  }
-  POLICY
-  }
+    assume_role_policy = jsonencode({
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "eks.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    })
+}
   
   resource "aws_iam_role_policy_attachment" "adcash-project-AmazonEKSClusterPolicy" {
     policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
     role       = aws_iam_role.adcash-project.name
   }
 
-  resource "aws_iam_role_policy_attachment" "adcash-project-AmazonEKSVPCresourceController" {
-    policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCresourceController"
+  resource "aws_iam_role_policy_attachment" "adcash-project-AmazonEKSVPCResourceController" {
+    policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
     role       = aws_iam_role.adcash-project.name
   }
 

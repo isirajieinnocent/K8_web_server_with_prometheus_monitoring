@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gandalf-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    
+    # Use rewrite only on specific paths, exclude /metrics by not setting rewrite here globally
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          # Root path, no rewrite
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gandalf-service
+                port:
+                  number: 80
+
+          # /gandalf/ path with rewrite
+          - path: /gandalf/
+            pathType: Prefix
+            backend:
+              service:
+                name: gandalf-service
+                port:
+                  number: 80
+            # Set rewrite annotation for this path only (using nginx.ingress.kubernetes.io/configuration-snippet)
+            # but this is complex - easier is to set rewrite-target on annotation and use a separate ingress for metrics
+
+          # /colombo/ path with rewrite
+          - path: /colombo/
+            pathType: Prefix
+            backend:
+              service:
+                name: gandalf-service
+                port:
+                  number: 80
+
+          # /metrics/ path WITHOUT rewrite
+          - path: /metrics/
+            pathType: Prefix
+            backend:
+              service:
+                name: gandalf-service
+                port:
+                  number: 80

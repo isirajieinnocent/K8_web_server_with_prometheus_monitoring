@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: adcash-webapp
+  labels:
+    name: adcash-webapp
+    environment: production
+    team: webdev
+  annotations:
+    owner: "web-team@adcash.com"
+    description: "Namespace for AdCash WebApp deployment"
+    scheduler.alpha.kubernetes.io/node-selector: ""

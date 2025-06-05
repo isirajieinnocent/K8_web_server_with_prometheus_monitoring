@@ -1,12 +1,20 @@
 #create bucket for statefile
-resource "aws_s3_bucket" "my-webapp-terraform-state" 
-bucket = "my-webapp-terraform-state"
+resource "aws_s3_bucket" "my-webapp-terraform-state" {
+  bucket = "my-webapp-terraform-state"
+
   versioning {
     enabled = true
-    dynamodb_table = aws_dynamodb_table.terraform_state_lock.name
-    encrypt = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
   }
 
   lifecycle {
-    prevent_destroy = true
+    create_before_destroy = true
   }
+}
